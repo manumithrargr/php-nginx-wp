@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+        mysql:
+                image: my-mariadb
+                volumes:
+                        - ./mysql:/var/lib/mysql
+                environment:
+                        MYSQL_ROOT_PASSWORD: UcNmkJDgv36dQ
+                        MYSQL_DATABASE: mywp
+                        MYSQL_USER: mywp_user
+                        MYSQL_PASSWORD: fcJBdm74tivc
+                restart: always
+
+        wordpress:
+                image: new
+                volumes:
+                        - ./html:/var/www/html/wp-content
+                depends_on:
+                        - mysql
+                links:
+                        - mysql
+                restart: always
+
+        nginx:
+                image: nginx:alpine
+                volumes:
+                        - ./nginx:/etc/nginx/conf.d
+                          #- ./html:/var/www/html
+                ports:
+                        - 80:80
+                links:
+                        - wordpress
+
+
